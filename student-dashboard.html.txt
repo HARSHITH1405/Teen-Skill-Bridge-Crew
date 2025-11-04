@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Teen Skill Bridge</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1>Teen Skill Bridge</h1>
+                <p class="subtitle">Student Dashboard</p>
+            </div>
+            <div class="header-right">
+                <div class="user-profile" onclick="toggleProfileMenu()">
+                    <div class="profile-icon">👤</div>
+                    <span id="student-name">Student</span>
+                    <div class="profile-dropdown" id="profile-dropdown">
+                        <a href="#" onclick="showProfileTab()">View Profile</a>
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+            <nav class="dashboard-tabs">
+                <button class="tab-btn active" onclick="switchTab('learning')">📚 Learning</button>
+                <button class="tab-btn" onclick="switchTab('earning')">💼 Earning</button>
+                <button class="tab-btn" onclick="switchTab('profile')">👤 Profile</button>
+            </nav>
+
+            <!-- Learning Tab -->
+            <div id="learning-tab" class="tab-content active">
+                <h2>Learning Center</h2>
+                <p class="tab-description">Explore courses and develop your skills</p>
+                
+                <div class="content-grid">
+                    <div class="course-card">
+                        <h3>Digital Marketing</h3>
+                        <p>Learn social media marketing, SEO, and content creation</p>
+                        <div class="course-meta">
+                            <span>⏱️ 4 weeks</span>
+                            <span>📊 Beginner</span>
+                        </div>
+                        <button class="btn-secondary">Start Learning</button>
+                    </div>
+                    
+                    <div class="course-card">
+                        <h3>Web Development</h3>
+                        <p>Build responsive websites with HTML, CSS, and JavaScript</p>
+                        <div class="course-meta">
+                            <span>⏱️ 6 weeks</span>
+                            <span>📊 Intermediate</span>
+                        </div>
+                        <button class="btn-secondary">Start Learning</button>
+                    </div>
+                    
+                    <div class="course-card">
+                        <h3>Graphic Design</h3>
+                        <p>Master design tools and create stunning visuals</p>
+                        <div class="course-meta">
+                            <span>⏱️ 5 weeks</span>
+                            <span>📊 Beginner</span>
+                        </div>
+                        <button class="btn-secondary">Start Learning</button>
+                    </div>
+                    
+                    <div class="course-card">
+                        <h3>Content Writing</h3>
+                        <p>Develop writing skills for blogs, articles, and social media</p>
+                        <div class="course-meta">
+                            <span>⏱️ 3 weeks</span>
+                            <span>📊 Beginner</span>
+                        </div>
+                        <button class="btn-secondary">Start Learning</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earning Tab -->
+            <div id="earning-tab" class="tab-content">
+                <h2>Job Opportunities</h2>
+                <p class="tab-description">Browse and apply for available positions</p>
+                
+                <div id="job-listings" class="job-listings">
+                    <!-- Jobs will be dynamically loaded here -->
+                </div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div id="profile-tab" class="tab-content">
+                <h2>Your Profile</h2>
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <div class="profile-avatar">👤</div>
+                        <div class="profile-info">
+                            <h3 id="profile-name">Loading...</h3>
+                            <p id="profile-email">Loading...</p>
+                            <span class="role-badge">Student</span>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-details">
+                        <h4>Skills & Interests</h4>
+                        <div class="skills-container" id="skills-container">
+                            <span class="skill-tag">Web Development</span>
+                            <span class="skill-tag">Design</span>
+                            <span class="skill-tag">Marketing</span>
+                        </div>
+                        
+                        <h4>Account Information</h4>
+                        <div class="info-row">
+                            <label>Account Created:</label>
+                            <span id="account-created">Loading...</span>
+                        </div>
+                        <div class="info-row">
+                            <label>Jobs Applied:</label>
+                            <span id="jobs-applied">0</span>
+                        </div>
+                        <div class="info-row">
+                            <label>Courses Enrolled:</label>
+                            <span id="courses-enrolled">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="https://instagram.com" target="_blank">📷 Instagram</a>
+                        <a href="https://youtube.com" target="_blank">▶️ YouTube</a>
+                        <a href="https://twitter.com" target="_blank">🐦 Twitter</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Information</h4>
+                    <p>📧 Email: mr.worldwide1405@gmail.com</p>
+                    <p>📞 Phone: 9080779189</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Teen Skill Bridge. All rights reserved.</p>
+                <p>Let us empower youth together...</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

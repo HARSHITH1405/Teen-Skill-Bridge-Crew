@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Provider Dashboard - Teen Skill Bridge</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1>Teen Skill Bridge</h1>
+                <p class="subtitle">Job Provider Dashboard</p>
+            </div>
+            <div class="header-right">
+                <div class="user-profile" onclick="toggleProfileMenu()">
+                    <div class="profile-icon">👤</div>
+                    <span id="provider-name">Provider</span>
+                    <div class="profile-dropdown" id="profile-dropdown">
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+            <div class="provider-content">
+                <h2>Job Management & Student Applications</h2>
+                
+                <!-- Post New Job Section -->
+                <div class="post-job-section">
+                    <h3>Post a New Job Opportunity</h3>
+                    <form onsubmit="postJob(event)" class="job-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Job Title</label>
+                                <input type="text" id="job-title" required placeholder="e.g., Social Media Manager">
+                            </div>
+                            <div class="form-group">
+                                <label>Job Type</label>
+                                <select id="job-type" required>
+                                    <option value="">Select type</option>
+                                    <option value="part-time">Part-time</option>
+                                    <option value="freelance">Freelance</option>
+                                    <option value="internship">Internship</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Job Description</label>
+                            <textarea id="job-description" required rows="4" placeholder="Describe the job role and responsibilities"></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Required Skills</label>
+                                <input type="text" id="job-skills" required placeholder="e.g., Marketing, Communication">
+                            </div>
+                            <div class="form-group">
+                                <label>Pay Rate</label>
+                                <input type="text" id="job-pay" required placeholder="e.g., $15/hour">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary">Post Job</button>
+                    </form>
+                </div>
+
+                <!-- Posted Jobs Section -->
+                <div class="posted-jobs-section">
+                    <h3>Your Posted Jobs</h3>
+                    <div id="posted-jobs-list" class="jobs-list">
+                        <!-- Posted jobs will be displayed here -->
+                    </div>
+                </div>
+
+                <!-- Enrolled Students Section -->
+                <div class="enrolled-students-section">
+                    <h3>Enrolled Students / Applications</h3>
+                    <p class="section-description">Students who have shown interest or applied to your positions</p>
+                    
+                    <div id="enrolled-students-list" class="students-list">
+                        <!-- Student applications will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="https://instagram.com" target="_blank">📷 Instagram</a>
+                        <a href="https://youtube.com"" target="_blank">▶️ YouTube</a>
+                        <a href="https://twitter.com" target="_blank">🐦 Twitter</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Information</h4>
+                    <p>📧 Email: mr.worldwide1405@gmail.com</p>
+                    <p>📞 Phone: 9080779189</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Teen Skill Bridge. All rights reserved.</p>
+                <p>Let us empower youth together...</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
