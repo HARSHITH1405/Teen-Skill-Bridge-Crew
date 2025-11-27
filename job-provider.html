@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,12 +6,214 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Provider Dashboard - Teen Skill Bridge</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .section-header h2 {
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .section-icon {
+            font-size: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .tabs-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .provider-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .provider-tab-btn {
+            padding: 1rem 1.5rem;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+
+        .provider-tab-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .provider-tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab-content-provider {
+            display: none;
+        }
+
+        .tab-content-provider.active {
+            display: block;
+        }
+
+        .provider-quick-tips {
+            background: #e3f2fd;
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .provider-quick-tips h4 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .provider-quick-tips ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+
+        .provider-quick-tips li {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .job-analytics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .analytics-card {
+            background: var(--light-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+        }
+
+        .analytics-card h4 {
+            color: var(--dark-color);
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .analytics-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .analytics-stat:last-child {
+            border-bottom: none;
+        }
+
+        .analytics-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .analytics-value {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .best-practices {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .best-practices h3 {
+            color: var(--dark-color);
+            margin-top: 0;
+        }
+
+        .practice-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--light-color);
+            border-radius: 8px;
+        }
+
+        .practice-number {
+            background: var(--primary-color);
+            color: var(--white);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .practice-content h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--dark-color);
+        }
+
+        .practice-content p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
         <header class="dashboard-header">
             <div class="header-left">
-                <h1>Teen Skill Bridge</h1>
+                <h1>🎯 Teen Skill Bridge</h1>
                 <p class="subtitle">Job Provider Dashboard</p>
             </div>
             <div class="header-right">
@@ -26,63 +229,188 @@
 
         <main class="dashboard-main">
             <div class="provider-content">
-                <h2>Job Management & Student Applications</h2>
-                
-                <!-- Post New Job Section -->
-                <div class="post-job-section">
-                    <h3>Post a New Job Opportunity</h3>
-                    <form onsubmit="postJob(event)" class="job-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Job Title</label>
-                                <input type="text" id="job-title" required placeholder="e.g., Social Media Manager">
-                            </div>
-                            <div class="form-group">
-                                <label>Job Type</label>
-                                <select id="job-type" required>
-                                    <option value="">Select type</option>
-                                    <option value="part-time">Part-time</option>
-                                    <option value="freelance">Freelance</option>
-                                    <option value="internship">Internship</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Job Description</label>
-                            <textarea id="job-description" required rows="4" placeholder="Describe the job role and responsibilities"></textarea>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Required Skills</label>
-                                <input type="text" id="job-skills" required placeholder="e.g., Marketing, Communication">
-                            </div>
-                            <div class="form-group">
-                                <label>Pay Rate</label>
-                                <input type="text" id="job-pay" required placeholder="e.g., $15/hour">
-                            </div>
-                        </div>
-                        
-                        <button type="submit" class="btn-primary">Post Job</button>
-                    </form>
+                <div class="section-header">
+                    <span class="section-icon">📊</span>
+                    <h2>Dashboard Overview</h2>
                 </div>
 
-                <!-- Posted Jobs Section -->
-                <div class="posted-jobs-section">
-                    <h3>Your Posted Jobs</h3>
-                    <div id="posted-jobs-list" class="jobs-list">
-                        <!-- Posted jobs will be displayed here -->
+                <!-- Stats Section -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="stats-jobs">0</div>
+                        <div class="stat-label">Active Job Postings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="stats-applications">0</div>
+                        <div class="stat-label">Total Applications</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="stats-filled">0</div>
+                        <div class="stat-label">Jobs Filled</div>
                     </div>
                 </div>
 
-                <!-- Enrolled Students Section -->
-                <div class="enrolled-students-section">
-                    <h3>Enrolled Students / Applications</h3>
-                    <p class="section-description">Students who have shown interest or applied to your positions</p>
-                    
-                    <div id="enrolled-students-list" class="students-list">
-                        <!-- Student applications will be displayed here -->
+                <!-- Quick Tips Section -->
+                <div class="provider-quick-tips">
+                    <h4>💡 Tips for Better Hiring</h4>
+                    <ul>
+                        <li>Write clear, specific job descriptions</li>
+                        <li>Include learning opportunities for teens</li>
+                        <li>Be responsive to applications quickly</li>
+                        <li>Provide fair compensation</li>
+                        <li>Offer mentorship and guidance</li>
+                    </ul>
+                </div>
+
+                <!-- Tabs for different sections -->
+                <div class="tabs-section">
+                    <div class="provider-tabs">
+                        <button class="provider-tab-btn active" onclick="switchProviderTab('overview')">📈 Overview</button>
+                        <button class="provider-tab-btn" onclick="switchProviderTab('post-job')">➕ Post Job</button>
+                        <button class="provider-tab-btn" onclick="switchProviderTab('my-jobs')">📋 My Jobs</button>
+                        <button class="provider-tab-btn" onclick="switchProviderTab('applications')">📬 Applications</button>
+                    </div>
+
+                    <!-- Overview Tab -->
+                    <div id="overview-tab" class="tab-content-provider active">
+                        <h3>Job Analytics</h3>
+                        <div class="job-analytics">
+                            <div class="analytics-card">
+                                <h4>📊 Recent Activity</h4>
+                                <div class="analytics-stat">
+                                    <span class="analytics-label">Jobs Posted This Month</span>
+                                    <span class="analytics-value" id="analytics-posted">0</span>
+                                </div>
+                                <div class="analytics-stat">
+                                    <span class="analytics-label">Applications This Week</span>
+                                    <span class="analytics-value" id="analytics-applications">0</span>
+                                </div>
+                                <div class="analytics-stat">
+                                    <span class="analytics-label">Avg. Response Time</span>
+                                    <span class="analytics-value">2.3 hrs</span>
+                                </div>
+                            </div>
+
+                            <div class="analytics-card">
+                                <h4>👥 Applicant Quality</h4>
+                                <div class="analytics-stat">
+                                    <span class="analytics-label">Avg. Qualifications Match</span>
+                                    <span class="analytics-value">92%</span>
+                                </div>
+                                <div class="analytics-stat">
+                                    <span class="analytics-label">Profile Completion Rate</span>
+                                    <span class="analytics-value">88%</span>
+                                </div>
+                                <div class="analytics-stat">
+                                    <span class="analytics-label">Top Skill Category</span>
+                                    <span class="analytics-value">Marketing</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Best Practices -->
+                        <div class="best-practices">
+                            <h3>🏆 Best Practices for Hiring Teens</h3>
+                            
+                            <div class="practice-item">
+                                <div class="practice-number">1</div>
+                                <div class="practice-content">
+                                    <h4>Be Mentor-Focused</h4>
+                                    <p>Remember you're not just hiring a worker, you're investing in a young person's future. Provide guidance and learning opportunities.</p>
+                                </div>
+                            </div>
+
+                            <div class="practice-item">
+                                <div class="practice-number">2</div>
+                                <div class="practice-content">
+                                    <h4>Flexible Scheduling</h4>
+                                    <p>Work around school schedules. Offer flexible hours that allow teens to balance work and education.</p>
+                                </div>
+                            </div>
+
+                            <div class="practice-item">
+                                <div class="practice-number">3</div>
+                                <div class="practice-content">
+                                    <h4>Fair Compensation</h4>
+                                    <p>Offer competitive wages for their age and experience. Fair pay builds trust and commitment.</p>
+                                </div>
+                            </div>
+
+                            <div class="practice-item">
+                                <div class="practice-number">4</div>
+                                <div class="practice-content">
+                                    <h4>Clear Communication</h4>
+                                    <p>Be explicit about expectations, responsibilities, and opportunities for growth in the role.</p>
+                                </div>
+                            </div>
+
+                            <div class="practice-item">
+                                <div class="practice-number">5</div>
+                                <div class="practice-content">
+                                    <h4>Positive Work Culture</h4>
+                                    <p>Create an inclusive, supportive environment where teens feel valued and can develop confidence.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Post Job Tab -->
+                    <div id="post-job-tab" class="tab-content-provider">
+                        <h3>📝 Create New Job Posting</h3>
+                        <form onsubmit="postJob(event)" class="job-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Job Title</label>
+                                    <input type="text" id="job-title" required placeholder="e.g., Social Media Manager, Content Writer">
+                                </div>
+                                <div class="form-group">
+                                    <label>Job Type</label>
+                                    <select id="job-type" required>
+                                        <option value="">Select type</option>
+                                        <option value="part-time">Part-time</option>
+                                        <option value="freelance">Freelance</option>
+                                        <option value="internship">Internship</option>
+                                        <option value="contract">Contract</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Job Description</label>
+                                <textarea id="job-description" required rows="5" placeholder="Describe the job role, responsibilities, and what teens will learn..."></textarea>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Required Skills</label>
+                                    <input type="text" id="job-skills" required placeholder="e.g., Marketing, Communication, Social Media">
+                                </div>
+                                <div class="form-group">
+                                    <label>Pay Rate</label>
+                                    <input type="text" id="job-pay" required placeholder="e.g., ₹250/day, ₹8000/month">
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn-primary">📤 Post Job Opportunity</button>
+                        </form>
+                    </div>
+
+                    <!-- My Jobs Tab -->
+                    <div id="my-jobs-tab" class="tab-content-provider">
+                        <h3>📋 Your Posted Jobs</h3>
+                        <div id="posted-jobs-list" class="jobs-list">
+                            <!-- Posted jobs will be displayed here -->
+                        </div>
+                    </div>
+
+                    <!-- Applications Tab -->
+                    <div id="applications-tab" class="tab-content-provider">
+                        <h3>📬 Student Applications</h3>
+                        <p class="tab-description">Review applications from students interested in your positions</p>
+                        
+                        <div id="enrolled-students-list" class="students-list">
+                            <!-- Student applications will be displayed here -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -94,7 +422,7 @@
                     <h4>Connect With Us</h4>
                     <div class="social-links">
                         <a href="https://instagram.com" target="_blank">📷 Instagram</a>
-                        <a href="https://youtube.com"" target="_blank">▶️ YouTube</a>
+                        <a href="https://youtube.com" target="_blank">▶️ YouTube</a>
                         <a href="https://twitter.com" target="_blank">🐦 Twitter</a>
                     </div>
                 </div>
@@ -112,5 +440,53 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        // Provider Tab Switching
+        function switchProviderTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content-provider');
+            const btns = document.querySelectorAll('.provider-tab-btn');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            btns.forEach(btn => btn.classList.remove('active'));
+            
+            const tabElement = document.getElementById(`${tabName}-tab`);
+            if (tabElement) {
+                tabElement.classList.add('active');
+            }
+            
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+        }
+
+        // Initialize provider data on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentPage = window.location.pathname;
+            
+            if (currentPage.includes('job-provider-dashboard') || currentPage.includes('job-provider')) {
+                loadJobProviderData();
+                updateProviderStats();
+            }
+        });
+
+        // Update provider statistics
+        function updateProviderStats() {
+            const user = getCurrentUser();
+            if (!user) return;
+
+            const userJobs = appData.jobs.filter(job => job.providerId === user.id);
+            const userApplications = appData.studentApplications.filter(
+                app => userJobs.some(job => job.id === app.jobId)
+            );
+
+            document.getElementById('stats-jobs').textContent = userJobs.length;
+            document.getElementById('stats-applications').textContent = userApplications.length;
+            document.getElementById('stats-filled').textContent = Math.floor(userApplications.length / 2);
+            
+            document.getElementById('analytics-posted').textContent = userJobs.length;
+            document.getElementById('analytics-applications').textContent = userApplications.length;
+        }
+    </script>
 </body>
 </html>
+
