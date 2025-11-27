@@ -1,106 +1,11 @@
-// ========================================
-// Global Data Storage (LocalStorage)
-// ========================================
-
-const initData = () => {
-    const defaultData = {
-        users: [],
-        jobs: [],
-        studentApplications: []
-    };
-    
-    const savedData = localStorage.getItem('teenSkillBridgeData');
-    return savedData ? JSON.parse(savedData) : defaultData;
-};
-
-let appData = initData();
-
-// Save data to localStorage
-const saveData = () => {
-    localStorage.setItem('teenSkillBridgeData', JSON.stringify(appData));
-};
-
-// Get current user
-const getCurrentUser = () => {
-    const userEmail = localStorage.getItem('currentUserEmail');
-    return appData.users.find(user => user.email === userEmail);
-};
-
-// ========================================
-// EMAIL FUNCTIONALITY - WELCOME EMAIL
-// ========================================
-
-async function sendWelcomeEmail(name, email) {
-    try {
-        // Using FormSubmit.co (free, no signup required)
-        const response = await fetch('https://formsubmit.co/ajax/mr.worldwide1405@gmail.com', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                _subject: '🎉 Welcome to Teen Skill Bridge!',
-                _template: 'table',
-                name: name,
-                email: email,
-                message: `
-Welcome to Teen Skill Bridge! 🎯
-
-Hi ${name},
-
-We are thrilled to have you join our community! Your account has been successfully created with Teen Skill Bridge. You can now access our platform and explore amazing opportunities.
-
-🚀 What You Can Do Now:
-✓ Browse job opportunities tailored to your skills
-✓ Enroll in learning courses
-✓ Connect with other talented youth
-✓ Start earning while learning
-
-📧 Account Details:
-Email: ${email}
-Role: New Member
-Platform: Teen Skill Bridge
-
-💡 Quick Tips:
-1. Complete your profile for better job matches
-2. Add your skills to get personalized recommendations
-3. Join our community forum for support
-
-Need Help?
-Contact us at: mr.worldwide1405@gmail.com
-Phone: +91-9080779189
-
-Best regards,
-The Teen Skill Bridge Team 🌟
-
-Empowering the next generation, one opportunity at a time!
-                `
-            })
-        });
-        
-        console.log('✓ Welcome email sent successfully!');
-        return true;
-    } catch (error) {
-        console.log('Note: Email service is operational in production environment');
-        console.log('In development, you may see this message - that is normal');
-        return false;
-    }
-}
-
-// ========================================
-// Authentication Functions - FIXED
-// ========================================
-
-// Show/Hide auth tabs - FIXED BUG
+// Show/Hide auth tabs
 function showTab(tabName) {
     const loginForm = document.getElementById('login-form');
     const signupForm = document.getElementById('signup-form');
     const tabBtns = document.querySelectorAll('.auth-tabs .tab-btn');
     
-    // Remove active class from all buttons
     tabBtns.forEach(btn => btn.classList.remove('active'));
     
-    // Add active class to clicked button (FIX: use event.target)
     if (event && event.target) {
         event.target.classList.add('active');
     }
@@ -114,16 +19,13 @@ function showTab(tabName) {
     }
 }
 
-// Handle Login - IMPROVED
+// Handle Login
 function handleLogin(event) {
     event.preventDefault();
     
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
-    const messageDiv = document.getElementById('login-message');
-    
-    // Clear previous messages
-    if (messageDiv) messageDiv.innerHTML = '';
+    const messageDiv = document.getElementById('login-message') || {};
     
     const user = appData.users.find(u => u.email === email && u.password === password);
     
@@ -131,8 +33,7 @@ function handleLogin(event) {
         // Store current user session
         localStorage.setItem('currentUserEmail', email);
         
-        // Show success message
-        if (messageDiv) {
+        if (messageDiv.innerHTML !== undefined) {
             messageDiv.innerHTML = '<div class="alert alert-success">✓ Login successful! Redirecting...</div>';
         }
         
@@ -143,15 +44,17 @@ function handleLogin(event) {
             } else if (user.role === 'job-provider') {
                 window.location.href = 'job-provider-dashboard.html';
             }
-        }, 1000);
+        }, 500);
     } else {
-        if (messageDiv) {
+        if (messageDiv.innerHTML !== undefined) {
             messageDiv.innerHTML = '<div class="alert alert-error">✗ Invalid email or password. Try: alice@example.com / password123</div>';
+        } else {
+            alert('Invalid email or password. Try: alice@example.com / password123');
         }
     }
 }
 
-// Handle Signup - IMPROVED
+// Handle Signup
 function handleSignup(event) {
     event.preventDefault();
     
@@ -159,19 +62,20 @@ function handleSignup(event) {
     const email = document.getElementById('signup-email').value.trim();
     const password = document.getElementById('signup-password').value;
     const role = document.getElementById('signup-role').value;
-    const messageDiv = document.getElementById('signup-message');
+    const messageDiv = document.getElementById('signup-message') || {};
     
-    // Clear previous messages
-    if (messageDiv) messageDiv.innerHTML = '';
-    
-    // Validation
+    // Validate
     if (password.length < 6) {
-        if (messageDiv) messageDiv.innerHTML = '<div class="alert alert-error">✗ Password must be at least 6 characters</div>';
+        if (messageDiv.innerHTML !== undefined) {
+            messageDiv.innerHTML = '<div class="alert alert-error">✗ Password must be at least 6 characters</div>';
+        }
         return;
     }
     
     if (!name || !email || !role) {
-        if (messageDiv) messageDiv.innerHTML = '<div class="alert alert-error">✗ Please fill all fields</div>';
+        if (messageDiv.innerHTML !== undefined) {
+            messageDiv.innerHTML = '<div class="alert alert-error">✗ Please fill all fields</div>';
+        }
         return;
     }
     
@@ -179,7 +83,9 @@ function handleSignup(event) {
     const existingUser = appData.users.find(u => u.email === email);
     
     if (existingUser) {
-        if (messageDiv) messageDiv.innerHTML = '<div class="alert alert-error">✗ Email already registered. Please login instead.</div>';
+        if (messageDiv.innerHTML !== undefined) {
+            messageDiv.innerHTML = '<div class="alert alert-error">✗ Email already registered. Please login instead.</div>';
+        }
         return;
     }
     
@@ -202,22 +108,40 @@ function handleSignup(event) {
     // Store current user session
     localStorage.setItem('currentUserEmail', email);
     
-    // Show success message
-    if (messageDiv) {
-        messageDiv.innerHTML = '<div class="alert alert-success">✓ Account created! Sending welcome email to ' + email + '...</div>';
+    if (messageDiv.innerHTML !== undefined) {
+        messageDiv.innerHTML = '<div class="alert alert-success">✓ Account created! Sending welcome email...</div>';
     }
     
     // Send welcome email
     sendWelcomeEmail(name, email);
     
-    // Redirect after 2 seconds
     setTimeout(() => {
         if (role === 'student') {
             window.location.href = 'student-dashboard.html';
         } else if (role === 'job-provider') {
             window.location.href = 'job-provider-dashboard.html';
         }
-    }, 2000);
+    }, 1500);
+}
+
+// Send welcome email
+function sendWelcomeEmail(name, email) {
+    // FormSubmit integration
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://formspree.io/f/xyzqwert'; // Replace with your formspree ID
+    form.style.display = 'none';
+    
+    form.innerHTML = `
+        <input type="hidden" name="subject" value="Welcome to Teen Skill Bridge">
+        <input type="hidden" name="message" value="Hi ${name}, welcome to Teen Skill Bridge!">
+        <input type="hidden" name="email" value="${email}">
+    `;
+    
+    document.body.appendChild(form);
+    // Commented out to prevent actual email sending during demo
+    // form.submit();
+    document.body.removeChild(form);
 }
 
 // Logout
@@ -226,9 +150,9 @@ function logout() {
     window.location.href = 'index.html';
 }
 
-// ========================================
-// Dashboard Functions
-// ========================================
+// ============================================
+// DASHBOARD FUNCTIONS
+// ============================================
 
 // Check if user is logged in
 const checkAuth = () => {
@@ -243,7 +167,9 @@ const checkAuth = () => {
 // Toggle profile dropdown
 function toggleProfileMenu() {
     const dropdown = document.getElementById('profile-dropdown');
-    if (dropdown) dropdown.classList.toggle('show');
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+    }
 }
 
 // Close dropdown when clicking outside
@@ -256,9 +182,9 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// ========================================
-// Student Dashboard Functions
-// ========================================
+// ============================================
+// STUDENT DASHBOARD FUNCTIONS
+// ============================================
 
 // Switch tabs in student dashboard
 function switchTab(tabName) {
@@ -268,12 +194,11 @@ function switchTab(tabName) {
     tabs.forEach(tab => tab.classList.remove('active'));
     btns.forEach(btn => btn.classList.remove('active'));
     
-    const tabElement = document.getElementById(`${tabName}-tab`);
-    if (tabElement) {
-        tabElement.classList.add('active');
+    const targetTab = document.getElementById(tabName + '-tab');
+    if (targetTab) {
+        targetTab.classList.add('active');
     }
     
-    // Add active to button
     if (event && event.target) {
         event.target.classList.add('active');
     }
@@ -287,10 +212,8 @@ function showProfileTab() {
     tabs.forEach(tab => tab.classList.remove('active'));
     btns.forEach(btn => btn.classList.remove('active'));
     
-    const profileTab = document.getElementById('profile-tab');
-    if (profileTab) {
-        profileTab.classList.add('active');
-    }
+    document.getElementById('profile-tab').classList.add('active');
+    btns[btns.length - 1].classList.add('active');
     
     const dropdown = document.getElementById('profile-dropdown');
     if (dropdown) {
@@ -301,11 +224,17 @@ function showProfileTab() {
 // Load student data
 function loadStudentData() {
     const user = checkAuth();
-    if (!user || user.role !== 'student') return;
+    
+    if (!user || user.role !== 'student') {
+        window.location.href = 'index.html';
+        return;
+    }
     
     // Update header
-    const nameElement = document.getElementById('student-name');
-    if (nameElement) nameElement.textContent = user.name;
+    const studentName = document.getElementById('student-name');
+    if (studentName) {
+        studentName.textContent = user.name;
+    }
     
     // Update profile tab
     const profileName = document.getElementById('profile-name');
@@ -316,7 +245,7 @@ function loadStudentData() {
     
     if (profileName) profileName.textContent = user.name;
     if (profileEmail) profileEmail.textContent = user.email;
-    if (accountCreated) accountCreated.textContent = new Date(user.createdAt).toLocaleDateString('en-IN');
+    if (accountCreated) accountCreated.textContent = new Date(user.createdAt).toLocaleDateString();
     if (jobsApplied) jobsApplied.textContent = user.jobsApplied || 0;
     if (coursesEnrolled) coursesEnrolled.textContent = user.coursesEnrolled || 0;
     
@@ -331,11 +260,7 @@ function loadJobListings() {
     if (!jobListingsContainer) return;
     
     if (appData.jobs.length === 0) {
-        jobListingsContainer.innerHTML = `
-            <div class="alert alert-info">
-                📋 No job opportunities available at the moment. Check back soon!
-            </div>
-        `;
+        jobListingsContainer.innerHTML = '<div class="alert alert-info">No job opportunities available at the moment. Check back soon!</div>';
         return;
     }
     
@@ -349,15 +274,9 @@ function loadJobListings() {
             </div>
             <p class="job-description">${job.description}</p>
             <div class="job-details">
-                <div class="job-detail-item">
-                    <span>💰 ${job.pay}</span>
-                </div>
-                <div class="job-detail-item">
-                    <span>🎯 ${job.skills}</span>
-                </div>
-                <div class="job-detail-item">
-                    <span>📅 ${new Date(job.postedAt).toLocaleDateString('en-IN')}</span>
-                </div>
+                <div class="job-detail-item"><span>${job.pay}</span></div>
+                <div class="job-detail-item"><span>${job.skills}</span></div>
+                <div class="job-detail-item"><span>Posted ${new Date(job.postedAt).toLocaleDateString()}</span></div>
             </div>
             <button class="btn-primary" onclick="applyForJob('${job.id}')">Apply Now</button>
         </div>
@@ -369,15 +288,15 @@ function applyForJob(jobId) {
     const user = getCurrentUser();
     const job = appData.jobs.find(j => j.id === jobId);
     
-    if (!user || !job) return;
+    if (!job) return;
     
     // Check if already applied
-    const alreadyApplied = appData.studentApplications.some(
-        app => app.studentId === user.id && app.jobId === jobId
+    const alreadyApplied = appData.studentApplications.some(app => 
+        app.studentId === user.id && app.jobId === jobId
     );
     
     if (alreadyApplied) {
-        alert('✓ You have already applied for this position!');
+        alert('You have already applied for this position!');
         return;
     }
     
@@ -395,29 +314,36 @@ function applyForJob(jobId) {
     
     appData.studentApplications.push(application);
     
-    // Update user's jobs applied count
+    // Update users jobs applied count
     const userIndex = appData.users.findIndex(u => u.id === user.id);
-    appData.users[userIndex].jobsApplied = (appData.users[userIndex].jobsApplied || 0) + 1;
+    if (userIndex >= 0) {
+        appData.users[userIndex].jobsApplied = (appData.users[userIndex].jobsApplied || 0) + 1;
+    }
     
     saveData();
     
-    alert('✓ Application submitted successfully!');
+    alert('Application submitted successfully!');
     loadJobListings();
-    loadStudentData();
 }
 
-// ========================================
-// Job Provider Dashboard Functions
-// ========================================
+// ============================================
+// JOB PROVIDER DASHBOARD FUNCTIONS
+// ============================================
 
 // Load job provider data
 function loadJobProviderData() {
     const user = checkAuth();
-    if (!user || user.role !== 'job-provider') return;
+    
+    if (!user || user.role !== 'job-provider') {
+        window.location.href = 'index.html';
+        return;
+    }
     
     // Update header
-    const nameElement = document.getElementById('provider-name');
-    if (nameElement) nameElement.textContent = user.name;
+    const providerName = document.getElementById('provider-name');
+    if (providerName) {
+        providerName.textContent = user.name;
+    }
     
     // Load posted jobs
     loadPostedJobs(user.id);
@@ -455,10 +381,7 @@ function postJob(event) {
     // Reset form
     event.target.reset();
     
-    // Show success message
-    alert('✓ Job posted successfully!');
-    
-    // Reload posted jobs
+    alert('Job posted successfully!');
     loadPostedJobs(user.id);
 }
 
@@ -470,11 +393,7 @@ function loadPostedJobs(providerId) {
     const providerJobs = appData.jobs.filter(job => job.providerId === providerId);
     
     if (providerJobs.length === 0) {
-        jobsList.innerHTML = `
-            <div class="alert alert-info">
-                You haven't posted any jobs yet. Use the form above to post your first job!
-            </div>
-        `;
+        jobsList.innerHTML = '<div class="alert alert-info">You haven\'t posted any jobs yet. Use the form above to post your first job!</div>';
         return;
     }
     
@@ -489,9 +408,9 @@ function loadPostedJobs(providerId) {
             </div>
             <p class="job-description">${job.description}</p>
             <div class="job-details">
-                <div class="job-detail-item">💰 ${job.pay}</div>
-                <div class="job-detail-item">🎯 ${job.skills}</div>
-                <div class="job-detail-item">📅 ${new Date(job.postedAt).toLocaleDateString('en-IN')}</div>
+                <div class="job-detail-item">${job.pay}</div>
+                <div class="job-detail-item">${job.skills}</div>
+                <div class="job-detail-item">${new Date(job.postedAt).toLocaleDateString()}</div>
             </div>
         </div>
     `).join('');
@@ -499,19 +418,21 @@ function loadPostedJobs(providerId) {
 
 // Delete a job
 function deleteJob(jobId) {
-    if (!confirm('Are you sure you want to delete this job posting?')) return;
+    if (!confirm('Are you sure you want to delete this job posting?')) {
+        return;
+    }
     
     appData.jobs = appData.jobs.filter(job => job.id !== jobId);
     appData.studentApplications = appData.studentApplications.filter(app => app.jobId !== jobId);
+    
     saveData();
     
     const user = getCurrentUser();
     loadPostedJobs(user.id);
     loadEnrolledStudents(user.id);
-    alert('✓ Job deleted successfully!');
 }
 
-// Load enrolled students / applications
+// Load enrolled students applications
 function loadEnrolledStudents(providerId) {
     const studentsList = document.getElementById('enrolled-students-list');
     if (!studentsList) return;
@@ -521,16 +442,12 @@ function loadEnrolledStudents(providerId) {
         .filter(job => job.providerId === providerId)
         .map(job => job.id);
     
-    const applications = appData.studentApplications.filter(
-        app => providerJobIds.includes(app.jobId)
+    const applications = appData.studentApplications.filter(app =>
+        providerJobIds.includes(app.jobId)
     );
     
     if (applications.length === 0) {
-        studentsList.innerHTML = `
-            <div class="alert alert-info">
-                No student applications yet. Students will appear here when they apply to your jobs.
-            </div>
-        `;
+        studentsList.innerHTML = '<div class="alert alert-info">No student applications yet. Students will appear here when they apply to your jobs.</div>';
         return;
     }
     
@@ -545,26 +462,26 @@ function loadEnrolledStudents(providerId) {
             </div>
             <div class="student-meta">
                 <p><strong>Applied for:</strong> ${app.jobTitle}</p>
-                <p><strong>Applied on:</strong> ${new Date(app.appliedAt).toLocaleDateString('en-IN')}</p>
+                <p><strong>Applied on:</strong> ${new Date(app.appliedAt).toLocaleDateString()}</p>
             </div>
         </div>
     `).join('');
 }
 
-// ========================================
-// Initialize on page load
-// ========================================
+// ============================================
+// INITIALIZE ON PAGE LOAD
+// ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
     const currentPage = window.location.pathname;
     
-    if (currentPage.includes('student-dashboard.html')) {
+    if (currentPage.includes('student-dashboard')) {
         loadStudentData();
-    } else if (currentPage.includes('job-provider.html') || currentPage.includes('job-provider-dashboard.html')) {
+    } else if (currentPage.includes('job-provider')) {
         loadJobProviderData();
     }
     
-    // Add sample data if database is empty
+    // Add sample data if database is empty for demo purposes
     if (appData.users.length === 0) {
         addSampleData();
     }
@@ -603,24 +520,16 @@ function addSampleData() {
                 type: 'part-time',
                 description: 'Help manage our social media accounts and create engaging content for our teenage audience.',
                 skills: 'Social Media, Content Creation, Communication',
-                pay: '₹300-500/day',
-                postedAt: new Date().toISOString()
-            },
-            {
-                id: '2',
-                providerId: '2',
-                providerName: 'Tech Startup Inc',
-                title: 'Web Development Intern',
-                type: 'internship',
-                description: 'Work on frontend development projects using React and learn modern web development practices.',
-                skills: 'React, JavaScript, CSS',
-                pay: '₹10,000/month',
+                pay: '$12/hour',
                 postedAt: new Date().toISOString()
             }
         ],
         studentApplications: []
     };
     
-    appData = sampleData;
+    appData.users = sampleData.users;
+    appData.jobs = sampleData.jobs;
+    appData.studentApplications = sampleData.studentApplications;
+    
     saveData();
 }
