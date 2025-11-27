@@ -1,16 +1,415 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard - Teen Skill Bridge</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* YouTube Video Styles */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            background: #000;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 12px;
+        }
+
+        /* Portfolio Styles */
+        .portfolio-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .portfolio-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .portfolio-header-icon {
+            font-size: 2rem;
+        }
+
+        .portfolio-header h2 {
+            color: var(--dark-color);
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .upload-area {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 2rem;
+            cursor: pointer;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .upload-area-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-area-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-area-subtext {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .portfolio-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, var(--light-color), var(--light-color));
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .portfolio-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .portfolio-item {
+            background: var(--light-color);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .portfolio-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .portfolio-item-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .portfolio-item-type {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+        }
+
+        .portfolio-item-type-icon {
+            font-size: 1.5rem;
+        }
+
+        .delete-portfolio-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: var(--white);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-portfolio-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .portfolio-item-body {
+            padding: 1rem;
+        }
+
+        .portfolio-item-name {
+            color: var(--dark-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            word-break: break-word;
+        }
+
+        .portfolio-item-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .portfolio-item-meta-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .portfolio-download-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--primary-color);
+            color: var(--white);
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .portfolio-download-btn:hover {
+            background: var(--primary-color-hover, #1d4ed8);
+            transform: scale(1.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-subtext {
+            font-size: 0.9rem;
+        }
+
+        .file-size-format {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .portfolio-category-filter {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: var(--light-color);
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        .upload-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .upload-modal.show {
+            display: flex;
+        }
+
+        .upload-modal-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .upload-modal-header {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .form-group-modal {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group-modal label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .form-group-modal input,
+        .form-group-modal select,
+        .form-group-modal textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group-modal input:focus,
+        .form-group-modal select:focus,
+        .form-group-modal textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn-modal-cancel {
+            padding: 0.75rem 1.5rem;
+            background: var(--light-color);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-modal-cancel:hover {
+            background: var(--border-color);
+        }
+
+        .btn-modal-submit {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-modal-submit:hover {
+            background: #1d4ed8;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .section-header h2 {
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .section-icon {
+            font-size: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .portfolio-items {
+                grid-template-columns: 1fr;
+            }
+
+            .portfolio-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .upload-area-icon {
+                font-size: 2rem;
+            }
+
+            .upload-area {
+                padding: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
         <header class="dashboard-header">
             <div class="header-left">
-                <h1>Teen Skill Bridge</h1>
+                <h1>🎯 Teen Skill Bridge</h1>
                 <p class="subtitle">Student Dashboard</p>
             </div>
             <div class="header-right">
@@ -29,70 +428,160 @@
             <nav class="dashboard-tabs">
                 <button class="tab-btn active" onclick="switchTab('learning')">📚 Learning</button>
                 <button class="tab-btn" onclick="switchTab('earning')">💼 Earning</button>
+                <button class="tab-btn" onclick="switchTab('portfolio')">🎓 Portfolio</button>
                 <button class="tab-btn" onclick="switchTab('profile')">👤 Profile</button>
             </nav>
 
             <!-- Learning Tab -->
             <div id="learning-tab" class="tab-content active">
-                <h2>Learning Center</h2>
-                <p class="tab-description">Explore courses and develop your skills</p>
+                <div class="section-header">
+                    <span class="section-icon">📚</span>
+                    <h2>Learning Center</h2>
+                </div>
+                <p class="tab-description">Explore courses and learn from YouTube tutorials</p>
                 
-                <div class="content-grid">
-                    <div class="course-card">
-                        <h3>Digital Marketing</h3>
-                        <p>Learn social media marketing, SEO, and content creation</p>
-                        <div class="course-meta">
-                            <span>⏱️ 4 weeks</span>
-                            <span>📊 Beginner</span>
+                <!-- Video Section -->
+                <div class="portfolio-section">
+                    <h3>🎥 Featured YouTube Tutorials</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                        <div class="course-card" style="background: var(--light-color); padding: 0; border-radius: 12px; border: 2px solid var(--border-color); cursor: pointer; transition: all 0.3s; overflow: hidden;" onclick="playVideo('dQw4w9WgXcQ')">
+                            <div style="width: 100%; height: 150px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--white);">▶️</div>
+                            <div style="padding: 1.5rem;">
+                                <h3 style="margin: 0 0 0.5rem 0; color: var(--dark-color);">Digital Marketing Basics</h3>
+                                <p style="color: var(--text-secondary); margin: 0 0 1rem 0; font-size: 0.95rem;">Learn social media marketing fundamentals</p>
+                                <span style="display: inline-block; background: var(--primary-color); color: var(--white); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">15 mins</span>
+                            </div>
                         </div>
-                        <button class="btn-secondary">Start Learning</button>
+                        
+                        <div class="course-card" style="background: var(--light-color); padding: 0; border-radius: 12px; border: 2px solid var(--border-color); cursor: pointer; transition: all 0.3s; overflow: hidden;" onclick="playVideo('BsDoLVMnmZs')">
+                            <div style="width: 100%; height: 150px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--white);">▶️</div>
+                            <div style="padding: 1.5rem;">
+                                <h3 style="margin: 0 0 0.5rem 0; color: var(--dark-color);">HTML/CSS for Beginners</h3>
+                                <p style="color: var(--text-secondary); margin: 0 0 1rem 0; font-size: 0.95rem;">Start your web development journey</p>
+                                <span style="display: inline-block; background: var(--primary-color); color: var(--white); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">22 mins</span>
+                            </div>
+                        </div>
+
+                        <div class="course-card" style="background: var(--light-color); padding: 0; border-radius: 12px; border: 2px solid var(--border-color); cursor: pointer; transition: all 0.3s; overflow: hidden;" onclick="playVideo('jNgSpl2Ynyc')">
+                            <div style="width: 100%; height: 150px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--white);">▶️</div>
+                            <div style="padding: 1.5rem;">
+                                <h3 style="margin: 0 0 0.5rem 0; color: var(--dark-color);">Content Creation Tips</h3>
+                                <p style="color: var(--text-secondary); margin: 0 0 1rem 0; font-size: 0.95rem;">Create engaging content for social media</p>
+                                <span style="display: inline-block; background: var(--primary-color); color: var(--white); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">18 mins</span>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="course-card">
-                        <h3>Web Development</h3>
-                        <p>Build responsive websites with HTML, CSS, and JavaScript</p>
-                        <div class="course-meta">
-                            <span>⏱️ 6 weeks</span>
-                            <span>📊 Intermediate</span>
+                </div>
+
+                <!-- Courses Section -->
+                <div class="portfolio-section">
+                    <h3>📖 Structured Learning Courses</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem;">
+                        <div style="background: var(--light-color); padding: 1.5rem; border-radius: 12px; border: 2px solid var(--border-color); text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">💼</div>
+                            <h3 style="margin: 0 0 0.5rem 0; color: var(--dark-color);">Digital Marketing</h3>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.95rem;">Learn social media, SEO, content creation</p>
+                            <button class="btn-secondary">Start Learning</button>
                         </div>
-                        <button class="btn-secondary">Start Learning</button>
-                    </div>
-                    
-                    <div class="course-card">
-                        <h3>Graphic Design</h3>
-                        <p>Master design tools and create stunning visuals</p>
-                        <div class="course-meta">
-                            <span>⏱️ 5 weeks</span>
-                            <span>📊 Beginner</span>
+
+                        <div style="background: var(--light-color); padding: 1.5rem; border-radius: 12px; border: 2px solid var(--border-color); text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">🌐</div>
+                            <h3 style="margin: 0 0 0.5rem 0; color: var(--dark-color);">Web Development</h3>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.95rem;">Build websites with HTML, CSS, JavaScript</p>
+                            <button class="btn-secondary">Start Learning</button>
                         </div>
-                        <button class="btn-secondary">Start Learning</button>
-                    </div>
-                    
-                    <div class="course-card">
-                        <h3>Content Writing</h3>
-                        <p>Develop writing skills for blogs, articles, and social media</p>
-                        <div class="course-meta">
-                            <span>⏱️ 3 weeks</span>
-                            <span>📊 Beginner</span>
+
+                        <div style="background: var(--light-color); padding: 1.5rem; border-radius: 12px; border: 2px solid var(--border-color); text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 1rem;">🎨</div>
+                            <h3 style="margin: 0 0 0.5rem 0; color: var(--dark-color);">Graphic Design</h3>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.95rem;">Master design tools and create visuals</p>
+                            <button class="btn-secondary">Start Learning</button>
                         </div>
-                        <button class="btn-secondary">Start Learning</button>
                     </div>
                 </div>
             </div>
 
             <!-- Earning Tab -->
             <div id="earning-tab" class="tab-content">
-                <h2>Job Opportunities</h2>
+                <div class="section-header">
+                    <span class="section-icon">💼</span>
+                    <h2>Job Opportunities</h2>
+                </div>
                 <p class="tab-description">Browse and apply for available positions</p>
                 
                 <div id="job-listings" class="job-listings">
-                    <!-- Jobs will be dynamically loaded here -->
+                    <!-- Jobs loaded here -->
+                </div>
+            </div>
+
+            <!-- Portfolio Tab (NEW) -->
+            <div id="portfolio-tab" class="tab-content">
+                <div class="section-header">
+                    <span class="section-icon">🎓</span>
+                    <h2>Digital Portfolio</h2>
+                </div>
+                <p class="tab-description">Showcase your projects, files, and certifications</p>
+
+                <!-- Upload Area -->
+                <div class="portfolio-section">
+                    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                        <div class="upload-area-icon">📤</div>
+                        <div class="upload-area-text">Upload Your Files</div>
+                        <div class="upload-area-subtext">Click to select projects, certifications, or documents</div>
+                    </div>
+                    <input type="file" id="fileInput" onchange="handleFileUpload(event)">
+                </div>
+
+                <!-- Statistics -->
+                <div class="portfolio-stats">
+                    <div class="stat-box">
+                        <div class="stat-number" id="total-files">0</div>
+                        <div class="stat-label">Total Files</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="total-projects">0</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="total-certifications">0</div>
+                        <div class="stat-label">Certifications</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="total-storage">0 MB</div>
+                        <div class="stat-label">Storage Used</div>
+                    </div>
+                </div>
+
+                <!-- Filter -->
+                <div class="portfolio-section">
+                    <div class="portfolio-category-filter">
+                        <button class="filter-btn active" onclick="filterPortfolio('all')">All Files</button>
+                        <button class="filter-btn" onclick="filterPortfolio('project')">📁 Projects</button>
+                        <button class="filter-btn" onclick="filterPortfolio('certification')">🏆 Certifications</button>
+                        <button class="filter-btn" onclick="filterPortfolio('document')">📄 Documents</button>
+                        <button class="filter-btn" onclick="filterPortfolio('image')">🖼️ Images</button>
+                    </div>
+                </div>
+
+                <!-- Portfolio Items -->
+                <div class="portfolio-section">
+                    <div id="portfolio-items-container" class="portfolio-items">
+                        <!-- Portfolio items loaded here -->
+                    </div>
+                    <div id="portfolio-empty" class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <div class="empty-state-text">No files yet</div>
+                        <div class="empty-state-subtext">Start building your portfolio by uploading your first file</div>
+                    </div>
                 </div>
             </div>
 
             <!-- Profile Tab -->
             <div id="profile-tab" class="tab-content">
-                <h2>Your Profile</h2>
+                <div class="section-header">
+                    <span class="section-icon">👤</span>
+                    <h2>Your Profile</h2>
+                </div>
                 <div class="profile-container">
                     <div class="profile-header">
                         <div class="profile-avatar">👤</div>
@@ -104,14 +593,14 @@
                     </div>
                     
                     <div class="profile-details">
-                        <h4>Skills & Interests</h4>
+                        <h4>🎯 Skills & Interests</h4>
                         <div class="skills-container" id="skills-container">
                             <span class="skill-tag">Web Development</span>
                             <span class="skill-tag">Design</span>
                             <span class="skill-tag">Marketing</span>
                         </div>
                         
-                        <h4>Account Information</h4>
+                        <h4>📊 Account Information</h4>
                         <div class="info-row">
                             <label>Account Created:</label>
                             <span id="account-created">Loading...</span>
@@ -123,6 +612,10 @@
                         <div class="info-row">
                             <label>Courses Enrolled:</label>
                             <span id="courses-enrolled">0</span>
+                        </div>
+                        <div class="info-row">
+                            <label>Portfolio Files:</label>
+                            <span id="portfolio-count">0</span>
                         </div>
                     </div>
                 </div>
@@ -152,6 +645,280 @@
         </footer>
     </div>
 
+    <!-- Video Modal -->
+    <div id="videoModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; justify-content:center; align-items:center;">
+        <div style="position:relative; width:90%; max-width:800px; background:white; border-radius:12px; overflow:hidden;">
+            <button onclick="closeVideo()" style="position:absolute; top:10px; right:10px; background:red; color:white; border:none; padding:10px 15px; border-radius:5px; cursor:pointer; z-index:1001;">✕ Close</button>
+            <div class="video-container">
+                <iframe id="videoFrame" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
+    <script>
+        // ============================================
+        // PORTFOLIO FUNCTIONALITY
+        // ============================================
+
+        let portfolioItems = [];
+        let currentFilter = 'all';
+
+        // Initialize portfolio from localStorage
+        function initPortfolio() {
+            const savedPortfolio = localStorage.getItem('studentPortfolio_' + getCurrentUserEmail());
+            if (savedPortfolio) {
+                portfolioItems = JSON.parse(savedPortfolio);
+            }
+            updatePortfolioDisplay();
+        }
+
+        // Handle file upload
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Validate file size (max 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB');
+                return;
+            }
+
+            // Read file as base64
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const fileData = {
+                    id: Date.now().toString(),
+                    name: file.name,
+                    size: formatFileSize(file.size),
+                    type: file.type,
+                    category: determineCategory(file.type),
+                    uploadDate: new Date().toLocaleDateString(),
+                    fileContent: e.target.result,
+                    description: ''
+                };
+
+                // Show upload modal for description
+                showUploadModal(fileData);
+            };
+            reader.readAsDataURL(file);
+
+            // Reset input
+            event.target.value = '';
+        }
+
+        // Show upload modal
+        function showUploadModal(fileData) {
+            const modal = document.createElement('div');
+            modal.className = 'upload-modal show';
+            modal.innerHTML = `
+                <div class="upload-modal-content">
+                    <div class="upload-modal-header">📤 Add File Details</div>
+                    <div class="form-group-modal">
+                        <label>File Name</label>
+                        <input type="text" id="modal-filename" value="${fileData.name}" readonly>
+                    </div>
+                    <div class="form-group-modal">
+                        <label>Category</label>
+                        <select id="modal-category">
+                            <option value="project" ${fileData.category === 'project' ? 'selected' : ''}>📁 Project</option>
+                            <option value="certification" ${fileData.category === 'certification' ? 'selected' : ''}>🏆 Certification</option>
+                            <option value="document" ${fileData.category === 'document' ? 'selected' : ''}>📄 Document</option>
+                            <option value="image" ${fileData.category === 'image' ? 'selected' : ''}>🖼️ Image</option>
+                        </select>
+                    </div>
+                    <div class="form-group-modal">
+                        <label>Description (Optional)</label>
+                        <textarea id="modal-description" placeholder="Describe your file..." rows="3"></textarea>
+                    </div>
+                    <div class="modal-buttons">
+                        <button class="btn-modal-cancel" onclick="this.closest('.upload-modal').remove()">Cancel</button>
+                        <button class="btn-modal-submit" onclick="savePortfolioItem('${fileData.id}', '${fileData.size}', '${fileData.uploadDate}', '${fileData.fileContent.replace(/'/g, "\\'")}', this.closest('.upload-modal'))">Save File</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            // Close modal when clicking outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.remove();
+                }
+            });
+        }
+
+        // Save portfolio item
+        function savePortfolioItem(fileId, fileSize, uploadDate, fileContent, modal) {
+            const category = document.getElementById('modal-category').value;
+            const description = document.getElementById('modal-description').value;
+            const fileName = document.getElementById('modal-filename').value;
+
+            const item = {
+                id: fileId,
+                name: fileName,
+                size: fileSize,
+                category: category,
+                description: description || 'No description provided',
+                uploadDate: uploadDate,
+                fileContent: fileContent
+            };
+
+            portfolioItems.push(item);
+            savePortfolioToStorage();
+            updatePortfolioDisplay();
+            modal.remove();
+
+            alert('✓ File added to your portfolio!');
+        }
+
+        // Delete portfolio item
+        function deletePortfolioItem(itemId) {
+            if (!confirm('Are you sure you want to delete this file?')) return;
+
+            portfolioItems = portfolioItems.filter(item => item.id !== itemId);
+            savePortfolioToStorage();
+            updatePortfolioDisplay();
+        }
+
+        // Save portfolio to localStorage
+        function savePortfolioToStorage() {
+            const userEmail = getCurrentUserEmail();
+            localStorage.setItem('studentPortfolio_' + userEmail, JSON.stringify(portfolioItems));
+        }
+
+        // Update portfolio display
+        function updatePortfolioDisplay() {
+            updatePortfolioStats();
+            displayPortfolioItems(currentFilter);
+        }
+
+        // Update statistics
+        function updatePortfolioStats() {
+            document.getElementById('total-files').textContent = portfolioItems.length;
+            document.getElementById('total-projects').textContent = portfolioItems.filter(p => p.category === 'project').length;
+            document.getElementById('total-certifications').textContent = portfolioItems.filter(p => p.category === 'certification').length;
+            
+            const totalSize = portfolioItems.reduce((sum, item) => {
+                const match = item.size.match(/(\d+)/);
+                return sum + (match ? parseInt(match[0]) : 0);
+            }, 0);
+            document.getElementById('total-storage').textContent = (totalSize / 1024).toFixed(2) + ' MB';
+            document.getElementById('portfolio-count').textContent = portfolioItems.length;
+        }
+
+        // Filter portfolio
+        function filterPortfolio(category) {
+            currentFilter = category;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            displayPortfolioItems(category);
+        }
+
+        // Display portfolio items
+        function displayPortfolioItems(filterCategory) {
+            const container = document.getElementById('portfolio-items-container');
+            const emptyState = document.getElementById('portfolio-empty');
+
+            let filtered = filterCategory === 'all' 
+                ? portfolioItems 
+                : portfolioItems.filter(item => item.category === filterCategory);
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            container.innerHTML = filtered.map(item => `
+                <div class="portfolio-item">
+                    <div class="portfolio-item-header">
+                        <div class="portfolio-item-type">
+                            <span class="portfolio-item-type-icon">${getCategoryIcon(item.category)}</span>
+                            <span>${item.category.charAt(0).toUpperCase() + item.category.slice(1)}</span>
+                        </div>
+                        <button class="delete-portfolio-btn" onclick="deletePortfolioItem('${item.id}')">✕</button>
+                    </div>
+                    <div class="portfolio-item-body">
+                        <div class="portfolio-item-name">${item.name}</div>
+                        <div class="portfolio-item-meta">
+                            <div class="portfolio-item-meta-item">
+                                <span>📅 Uploaded:</span>
+                                <span>${item.uploadDate}</span>
+                            </div>
+                            <div class="portfolio-item-meta-item">
+                                <span>💾 Size:</span>
+                                <span>${item.size}</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; padding: 1rem; background: rgba(0,0,0,0.05); border-radius: 8px; font-size: 0.9rem; color: var(--text-secondary);">
+                            <strong>Description:</strong> ${item.description}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Get category icon
+        function getCategoryIcon(category) {
+            const icons = {
+                project: '📁',
+                certification: '🏆',
+                document: '📄',
+                image: '🖼️'
+            };
+            return icons[category] || '📎';
+        }
+
+        // Determine file category
+        function determineCategory(fileType) {
+            if (fileType.startsWith('image/')) return 'image';
+            if (fileType === 'application/pdf') return 'document';
+            if (fileType.includes('document') || fileType.includes('text')) return 'document';
+            return 'document';
+        }
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        // Video functions
+        function playVideo(videoId) {
+            const modal = document.getElementById('videoModal');
+            const frame = document.getElementById('videoFrame');
+            frame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            modal.style.display = 'flex';
+        }
+
+        function closeVideo() {
+            const modal = document.getElementById('videoModal');
+            const frame = document.getElementById('videoFrame');
+            frame.src = '';
+            modal.style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('videoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeVideo();
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initPortfolio();
+        });
+    </script>
 </body>
 </html>
+
