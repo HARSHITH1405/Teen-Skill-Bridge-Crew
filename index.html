@@ -1,393 +1,28 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teen Skill Bridge - Connecting Talent, Building Futures</title>
+    <title>Teen Skill Bridge - Login/Signup</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Role Selection Styles */
-        .role-selection-container {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-
-        .role-selection-container.hidden {
-            display: none;
-        }
-
-        .role-header {
-            text-align: center;
-            color: var(--white);
-            margin-bottom: 3rem;
-        }
-
-        .role-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .role-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        .role-selection-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 900px;
-            width: 100%;
-        }
-
-        .role-card {
-            background: var(--white);
-            border-radius: 16px;
-            padding: 3rem 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .role-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-        }
-
-        .role-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-        }
-
-        .role-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        .role-card h2 {
-            color: var(--dark-color);
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .role-card p {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-        }
-
-        .role-features {
-            text-align: left;
-            margin-bottom: 2rem;
-            background: var(--light-color);
-            padding: 1.5rem;
-            border-radius: 12px;
-        }
-
-        .role-feature-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
-            color: var(--text-primary);
-            font-size: 0.95rem;
-        }
-
-        .role-feature-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .feature-icon {
-            font-size: 1.2rem;
-            min-width: 20px;
-        }
-
-        .role-button {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: var(--white);
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .role-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
-        }
-
-        /* Auth View Container */
-        .auth-view-container {
-            min-height: 100vh;
-            background: var(--light-color);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .auth-view-container.hidden {
-            display: none;
-        }
-
-        /* Back Button */
-        .back-button-container {
-            padding: 1rem;
-            background: var(--white);
-            box-shadow: var(--shadow);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .back-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: transparent;
-            border: none;
-            color: var(--primary-color);
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 0.5rem 1rem;
-            transition: all 0.3s;
-        }
-
-        .back-button:hover {
-            background: var(--light-color);
-            border-radius: 8px;
-        }
-
-        .role-badge {
-            display: inline-block;
-            background: var(--primary-color);
-            color: var(--white);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .auth-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: var(--white);
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .auth-header h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .auth-header p {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-
-        .auth-content {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-
-        .auth-form-wrapper {
-            background: var(--white);
-            border-radius: 12px;
-            box-shadow: var(--shadow-lg);
-            padding: 2rem;
-            max-width: 500px;
-            width: 100%;
-        }
-
-        .welcome-message {
-            background: var(--light-color);
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .welcome-message h3 {
-            color: var(--dark-color);
-            margin: 0 0 0.5rem 0;
-        }
-
-        .welcome-message p {
-            color: var(--text-secondary);
-            margin: 0;
-            font-size: 0.95rem;
-        }
-
-        .message {
-            margin-bottom: 1rem;
-        }
-
-        .alert {
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-
-        .alert-success {
-            background: #d1fae5;
-            color: #065f46;
-            border: 2px solid var(--success-color);
-        }
-
-        .alert-error {
-            background: #fee2e2;
-            color: #991b1b;
-            border: 2px solid var(--danger-color);
-        }
-
-        .alert-info {
-            background: #dbeafe;
-            color: #1e40af;
-            border: 2px solid var(--primary-color);
-        }
-
-        @media (max-width: 768px) {
-            .role-selection-cards {
-                grid-template-columns: 1fr;
-            }
-
-            .role-header h1 {
-                font-size: 1.8rem;
-            }
-
-            .role-card {
-                padding: 2rem 1.5rem;
-            }
-
-            .role-icon {
-                font-size: 3rem;
-            }
-
-            .back-button-container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-        }
-    </style>
 </head>
 <body>
-    <!-- STEP 1: ROLE SELECTION PAGE -->
-    <div id="roleSelectionView" class="role-selection-container">
-        <div class="role-header">
+    <div class="landing-container">
+        <header class="header">
             <h1>🎯 Teen Skill Bridge</h1>
-            <p>Welcome! Choose your role to get started</p>
-        </div>
+            <p class="tagline">Connecting Talent, Building Futures</p>
+        </header>
 
-        <div class="role-selection-cards">
-            <!-- Teen / Student Card -->
-            <div class="role-card" onclick="selectRole('student')">
-                <div class="role-icon">👨‍🎓</div>
-                <h2>I'm a Teen / Student</h2>
-                <p>Looking for job opportunities and skill development</p>
-                
-                <div class="role-features">
-                    <div class="role-feature-item">
-                        <span class="feature-icon">💼</span>
-                        <span>Browse job opportunities</span>
-                    </div>
-                    <div class="role-feature-item">
-                        <span class="feature-icon">🎓</span>
-                        <span>Learn new skills</span>
-                    </div>
-                    <div class="role-feature-item">
-                        <span class="feature-icon">💰</span>
-                        <span>Earn while learning</span>
-                    </div>
-                    <div class="role-feature-item">
-                        <span class="feature-icon">🎥</span>
-                        <span>Watch tutorials</span>
-                    </div>
-                </div>
-                
-                <button class="role-button">Get Started as Student →</button>
+        <main class="main-content">
+            <div class="hero-section">
+                <h2>Empowering the Next Generation</h2>
+                <p>AI-powered platform matching teenagers with suitable job opportunities</p>
             </div>
 
-            <!-- Job Provider Card -->
-            <div class="role-card" onclick="selectRole('job-provider')">
-                <div class="role-icon">🏢</div>
-                <h2>I'm a Job Provider</h2>
-                <p>Hiring talented teens for your business</p>
-                
-                <div class="role-features">
-                    <div class="role-feature-item">
-                        <span class="feature-icon">📋</span>
-                        <span>Post job opportunities</span>
-                    </div>
-                    <div class="role-feature-item">
-                        <span class="feature-icon">👥</span>
-                        <span>Connect with talent</span>
-                    </div>
-                    <div class="role-feature-item">
-                        <span class="feature-icon">📊</span>
-                        <span>Track applications</span>
-                    </div>
-                    <div class="role-feature-item">
-                        <span class="feature-icon">💡</span>
-                        <span>Hiring guidance</span>
-                    </div>
-                </div>
-                
-                <button class="role-button">Get Started as Provider →</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- STEP 2: AUTH PAGE (Login/Signup) -->
-    <div id="authView" class="auth-view-container hidden">
-        <!-- Back Button -->
-        <div class="back-button-container">
-            <button class="back-button" onclick="backToRoleSelection()">
-                ← Back to Role Selection
-            </button>
-            <span id="currentRoleBadge" class="role-badge"></span>
-        </div>
-
-        <!-- Auth Header -->
-        <div class="auth-header">
-            <h1>Teen Skill Bridge</h1>
-            <p id="authSubtitle">Welcome! Please login or sign up</p>
-        </div>
-
-        <!-- Auth Content -->
-        <div class="auth-content">
-            <div class="auth-form-wrapper">
-                <!-- Welcome Message -->
-                <div id="welcomeMessage" class="welcome-message">
-                    <h3>👋 Welcome!</h3>
-                    <p id="welcomeText">Choose login or sign up below</p>
-                </div>
-
-                <!-- Auth Tabs -->
+            <div class="auth-container">
                 <div class="auth-tabs">
-                    <button class="tab-btn active" onclick="showAuthTab('login')">Login</button>
-                    <button class="tab-btn" onclick="showAuthTab('signup')">Sign Up</button>
+                    <button class="tab-btn active" onclick="showTab('login')">Login</button>
+                    <button class="tab-btn" onclick="showTab('signup')">Sign Up</button>
                 </div>
 
                 <!-- Login Form -->
@@ -427,67 +62,69 @@
                             <label>Password</label>
                             <input type="password" id="signup-password" required placeholder="Create a password (min 6 chars)">
                         </div>
+                        <div class="form-group">
+                            <label>I am a:</label>
+                            <select id="signup-role" required>
+                                <option value="">Select your role</option>
+                                <option value="student">Student</option>
+                                <option value="job-provider">Job Provider</option>
+                            </select>
+                        </div>
                         <button type="submit" class="btn-primary">Sign Up</button>
                     </form>
                 </div>
             </div>
-        </div>
+
+            <div class="features-section">
+                <h3>Why Teen Skill Bridge?</h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h4>💼 Job Opportunities</h4>
+                        <p>Browse and apply for suitable job positions tailored for your skills</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📚 Learn & Grow</h4>
+                        <p>Access educational resources and develop new skills</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>💰 Earn Money</h4>
+                        <p>Start earning while still in school</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="https://instagram.com" target="_blank">📷 Instagram</a>
+                        <a href="https://youtube.com" target="_blank">▶️ YouTube</a>
+                        <a href="https://twitter.com" target="_blank">🐦 Twitter</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Information</h4>
+                    <p>📧 Email: mr.worldwide1405@gmail.com</p>
+                    <p>📞 Phone: 9080779189</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Teen Skill Bridge. All rights reserved.</p>
+                <p>Let us empower youth together...</p>
+            </div>
+        </footer>
     </div>
 
     <script src="script.js"></script>
     <script>
-        // Global variable to store selected role
-        let selectedRole = null;
+        // ============================================
+        // AUTHENTICATION FUNCTIONS - FIXED
+        // ============================================
 
-        // ============================================
-        // STEP 1: User selects role (Teen or Job Provider)
-        // ============================================
-        function selectRole(role) {
-            console.log('User selected role:', role);
-            selectedRole = role;
-            
-            // Hide role selection, show auth
-            document.getElementById('roleSelectionView').classList.add('hidden');
-            document.getElementById('authView').classList.remove('hidden');
-            
-            // Update UI based on role
-            if (role === 'student') {
-                document.getElementById('currentRoleBadge').textContent = '👨‍🎓 Student Mode';
-                document.getElementById('authSubtitle').textContent = 'Welcome Student! Login or create an account';
-                document.getElementById('welcomeText').textContent = 'Login to access job opportunities and learning resources';
-            } else if (role === 'job-provider') {
-                document.getElementById('currentRoleBadge').textContent = '🏢 Job Provider Mode';
-                document.getElementById('authSubtitle').textContent = 'Welcome Job Provider! Login or create an account';
-                document.getElementById('welcomeText').textContent = 'Login to post jobs and manage applications';
-            }
-
-            // Reset to login tab
-            showAuthTab('login');
-        }
-
-        // ============================================
-        // STEP 2: User goes back to role selection
-        // ============================================
-        function backToRoleSelection() {
-            console.log('Going back to role selection');
-            
-            // Reset forms
-            document.getElementById('login-form').reset();
-            document.getElementById('signup-form').reset();
-            document.getElementById('login-message').innerHTML = '';
-            document.getElementById('signup-message').innerHTML = '';
-            
-            // Show role selection, hide auth
-            document.getElementById('roleSelectionView').classList.remove('hidden');
-            document.getElementById('authView').classList.add('hidden');
-            
-            selectedRole = null;
-        }
-
-        // ============================================
-        // STEP 3: Switch between Login and Signup tabs
-        // ============================================
-        function showAuthTab(tabName) {
+        // Switch between Login and Signup tabs
+        function showTab(tabName) {
             console.log('Switching to tab:', tabName);
             
             const loginForm = document.getElementById('login-form');
@@ -512,65 +149,64 @@
         }
 
         // ============================================
-        // STEP 4: Handle Login
+        // HANDLE LOGIN
         // ============================================
         function handleLogin(event) {
             event.preventDefault();
+            console.log('Login attempt...');
             
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value;
             const messageDiv = document.getElementById('login-message');
             
-            console.log('Login attempt - Email:', email, 'Role:', selectedRole);
-            
             messageDiv.innerHTML = '';
+            
+            console.log('Email:', email);
+            console.log('Password:', password);
+            console.log('appData.users:', appData.users);
             
             // Find user
             const user = appData.users.find(u => u.email === email && u.password === password);
             
+            console.log('User found:', user);
+            
             if (user) {
-                console.log('User found:', user);
-                console.log('User role:', user.role, 'Selected role:', selectedRole);
-                
-                // Check if role matches
-                if (user.role !== selectedRole) {
-                    console.log('Role mismatch!');
-                    messageDiv.innerHTML = '<div class="alert alert-error">✗ This account is for ' + user.role + 's, not ' + selectedRole + 's. Please go back and select the correct role.</div>';
-                    return;
-                }
-                
                 localStorage.setItem('currentUserEmail', email);
                 messageDiv.innerHTML = '<div class="alert alert-success">✓ Login successful! Redirecting...</div>';
+                console.log('Redirecting to:', user.role === 'student' ? 'student-dashboard.html' : 'job-provider-dashboard.html');
                 
                 setTimeout(() => {
                     if (user.role === 'student') {
-                        console.log('Redirecting to student dashboard');
                         window.location.href = 'student-dashboard.html';
                     } else if (user.role === 'job-provider') {
-                        console.log('Redirecting to job provider dashboard');
                         window.location.href = 'job-provider-dashboard.html';
                     }
                 }, 1500);
             } else {
-                console.log('User not found or invalid credentials');
-                messageDiv.innerHTML = '<div class="alert alert-error">✗ Invalid email or password. Demo: alice@example.com / password123</div>';
+                messageDiv.innerHTML = '<div class="alert alert-error">✗ Invalid email or password. Try demo: alice@example.com / password123</div>';
+                console.log('Login failed - user not found or credentials wrong');
             }
         }
 
         // ============================================
-        // STEP 5: Handle Signup
+        // HANDLE SIGNUP
         // ============================================
         function handleSignup(event) {
             event.preventDefault();
+            console.log('Signup attempt...');
             
             const name = document.getElementById('signup-name').value.trim();
             const email = document.getElementById('signup-email').value.trim();
             const password = document.getElementById('signup-password').value;
+            const role = document.getElementById('signup-role').value;
             const messageDiv = document.getElementById('signup-message');
             
-            console.log('Signup attempt - Name:', name, 'Email:', email, 'Role:', selectedRole);
-            
             messageDiv.innerHTML = '';
+            
+            console.log('Name:', name);
+            console.log('Email:', email);
+            console.log('Password:', password);
+            console.log('Role:', role);
             
             // Validation
             if (password.length < 6) {
@@ -578,7 +214,7 @@
                 return;
             }
             
-            if (!name || !email) {
+            if (!name || !email || !role) {
                 messageDiv.innerHTML = '<div class="alert alert-error">✗ Please fill all fields</div>';
                 return;
             }
@@ -591,20 +227,20 @@
                 return;
             }
             
-            // Create new user with selected role
+            // Create new user
             const newUser = {
                 id: Date.now().toString(),
                 name,
                 email,
                 password,
-                role: selectedRole, // ✅ Use selected role
+                role,
                 createdAt: new Date().toISOString(),
-                skills: selectedRole === 'student' ? [] : null,
-                jobsApplied: selectedRole === 'student' ? 0 : null,
-                coursesEnrolled: selectedRole === 'student' ? 0 : null
+                skills: role === 'student' ? [] : null,
+                jobsApplied: role === 'student' ? 0 : null,
+                coursesEnrolled: role === 'student' ? 0 : null
             };
             
-            console.log('Creating new user with role:', selectedRole);
+            console.log('Creating new user:', newUser);
             
             appData.users.push(newUser);
             saveData();
@@ -617,10 +253,10 @@
             sendWelcomeEmail(name, email);
             
             setTimeout(() => {
-                if (selectedRole === 'student') {
+                if (role === 'student') {
                     console.log('Redirecting to student dashboard');
                     window.location.href = 'student-dashboard.html';
-                } else if (selectedRole === 'job-provider') {
+                } else if (role === 'job-provider') {
                     console.log('Redirecting to job provider dashboard');
                     window.location.href = 'job-provider-dashboard.html';
                 }
@@ -631,20 +267,14 @@
         // Initialize on page load
         // ============================================
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('Page loaded, initializing...');
+            console.log('Login page loaded');
+            console.log('appData:', appData);
             
             if (appData.users.length === 0) {
-                console.log('No users found, adding sample data');
+                console.log('No users, adding sample data');
                 addSampleData();
             }
-            
-            console.log('App data:', appData);
         });
     </script>
 </body>
 </html>
-
-
-
-
-
